@@ -1,0 +1,38 @@
+{
+  "name": "sinri/alderamin",
+  "description": "A MySQL Report Generate Solution with PHP",
+  "type": "project",
+  "license": "GPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "Sinri Edogawa",
+      "email": "e.joshua.s.e@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "sinri/ark": "^2.4",
+    "sinri/ark-pdo": "^1.5",
+    "sinri/ark-mysqli": "^1.0",
+    "sinri/ark-mail": "~1.1",
+    "box/spout": "^2.7",
+    "ext-mysqli": "*",
+    "ext-json": "*",
+    "ext-mbstring": "*"
+  },
+  "require-dev": {
+    "aliyuncs/oss-sdk-php": "~2.0",
+    "phpoffice/phpspreadsheet": "~1.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "sinri\\Alderamin": ""
+    }
+  },
+  "repositories": {
+    "packagist": {
+      "type": "composer",
+      "url": "https://packagist.laravel-china.org"
+    }
+  }
+}
