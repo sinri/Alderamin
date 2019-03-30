@@ -11,6 +11,7 @@ namespace sinri\Alderamin\core\unit;
 
 use Exception;
 use sinri\Alderamin\core\Alderamin;
+use sinri\Alderamin\core\configuration\AlderaminConfig;
 use sinri\Alderamin\core\database\DatabaseReader;
 use sinri\Alderamin\core\database\DatabaseWriter;
 use sinri\Alderamin\core\model\LockModel;
@@ -80,7 +81,7 @@ abstract class BaseUnit
      */
     protected function fetchQueryTemplateFromSqlStore($name, $folder, $type, $runCommonReplace = true)
     {
-        $sqlPath = Alderamin::readConfig(['core', 'sql-store'], '/dummy');
+        $sqlPath = Alderamin::getConfig()->getSqlStore();
         $sqlPath .= DIRECTORY_SEPARATOR . $type;
         $sqlPath .= DIRECTORY_SEPARATOR . $folder;
         $sqlPath .= DIRECTORY_SEPARATOR . $name . ".sql";
@@ -206,11 +207,12 @@ abstract class BaseUnit
 
     /**
      * @return ArkMySQLi
+     * @throws Exception
      */
     protected function getReadDatabaseNode()
     {
         if (!$this->readDatabaseNode) {
-            $this->readDatabaseNode = Alderamin::getDatabaseNode(Alderamin::KEY_READ_NODE);
+            $this->readDatabaseNode = Alderamin::getDatabaseNode(AlderaminConfig::KEY_READ_NODE);
         }
         return $this->readDatabaseNode;
     }
@@ -245,11 +247,12 @@ abstract class BaseUnit
 
     /**
      * @return ArkMySQLi
+     * @throws Exception
      */
     protected function getWriteDatabaseNode()
     {
         if (!$this->writeDatabaseNode) {
-            $this->writeDatabaseNode = Alderamin::getDatabaseNode(Alderamin::KEY_WRITE_NODE);
+            $this->writeDatabaseNode = Alderamin::getDatabaseNode(AlderaminConfig::KEY_WRITE_NODE);
         }
         return $this->writeDatabaseNode;
     }

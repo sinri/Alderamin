@@ -6,7 +6,7 @@
  * Time: 00:46
  */
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 date_default_timezone_set("Asia/Shanghai");
 
@@ -83,7 +83,7 @@ try {
             }
         }
 
-        if (count($runningTasks) >= \sinri\Alderamin\core\Alderamin::readConfig(['polaris', 'cron-max'], 5)) {
+        if (count($runningTasks) >= \sinri\Alderamin\core\Alderamin::getConfig()->getCronMax()) {
             $logger->error("Cron Busy");
             exit;
         }

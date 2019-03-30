@@ -94,7 +94,7 @@ abstract class ReportUnit extends BaseUnit
         }
 
         $this->logger = Alderamin::getLogger("build-" . intval($reportId, 10));
-        $this->logFilePath = Alderamin::readConfig(['log', 'path'], __DIR__ . '/../log') . DIRECTORY_SEPARATOR . "log-" . "build_" . intval($reportId, 10) . "-" . date('Y-m-d') . ".log";
+        $this->logFilePath = Alderamin::getConfig()->getLogDirPath() . DIRECTORY_SEPARATOR . "log-" . "build_" . intval($reportId, 10) . "-" . date('Y-m-d') . ".log";
 
         $attributeRows = (new ReportAttributeModel())->selectRows(['report_id' => $reportId], null, null, ["key", "value", "type"]);
         $this->attributes = [];
@@ -117,7 +117,7 @@ abstract class ReportUnit extends BaseUnit
      */
     protected function prepareStorage()
     {
-        $store = Alderamin::readConfig(['core', 'report-store']);
+        $store = Alderamin::getConfig()->getReportStore();
         if (empty($store)) {
             $this->logger->error("REPORT STORE EMPTY");
             throw new Exception("CSV Store Not Configured");
@@ -166,7 +166,7 @@ abstract class ReportUnit extends BaseUnit
             $folder = $this->getCode();
         }
 
-        $sqlPath = Alderamin::readConfig(['core', 'sql-store'], '/dummy');
+        $sqlPath = Alderamin::getConfig()->getSqlStore();
         $sqlPath .= DIRECTORY_SEPARATOR . $type;
         $sqlPath .= DIRECTORY_SEPARATOR . $folder;
         $sqlPath .= DIRECTORY_SEPARATOR . $name . ".json";
@@ -276,7 +276,7 @@ abstract class ReportUnit extends BaseUnit
      */
     public static function getExcelStorage()
     {
-        $store = Alderamin::readConfig(['core', 'report-store']);
+        $store = Alderamin::getConfig()->getReportStore();
         if (empty($store)) {
             throw new Exception("Excel Store Not Configured");
         }
@@ -390,7 +390,7 @@ abstract class ReportUnit extends BaseUnit
 
             $this->logger->info("Emails provided in attributes", ['emails' => $emails]);
 
-            $mailer = new ArkSMTPMailer(Alderamin::readConfig(['email']));
+            $mailer = new ArkSMTPMailer(Alderamin::getConfig()->getSmtpConfig());
             $mailer->prepare();
             foreach ($emails as $email) {
                 $mailer->addReceiver($email);

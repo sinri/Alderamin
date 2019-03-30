@@ -1,7 +1,7 @@
 {
   "name": "sinri/alderamin",
   "description": "A MySQL Report Generate Solution with PHP",
-  "type": "project",
+  "type": "library",
   "license": "GPL-3.0-or-later",
   "authors": [
     {
@@ -11,10 +11,10 @@
   ],
   "minimum-stability": "stable",
   "require": {
-    "sinri/ark": "^2.4",
-    "sinri/ark-pdo": "^1.5",
-    "sinri/ark-mysqli": "^1.0",
-    "sinri/ark-mail": "~1.1",
+    "sinri/ark": "~2.4",
+    "sinri/ark-pdo": "~1.5",
+    "sinri/ark-mysqli": "~1.2",
+    "sinri/ark-mail": "~1.2",
     "box/spout": "^2.7",
     "ext-mysqli": "*",
     "ext-json": "*",
@@ -26,7 +26,7 @@
   },
   "autoload": {
     "psr-4": {
-      "sinri\\Alderamin": ""
+      "sinri\\Alderamin\\": "src"
     }
   },
   "repositories": {

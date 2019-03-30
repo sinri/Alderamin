@@ -9,13 +9,13 @@
 namespace sinri\Alderamin\cli;
 
 
+use sinri\Alderamin\core\schedule\BaseScheduleFactory;
 use sinri\Alderamin\core\schedule\ScheduleJob;
 use sinri\ark\cli\ArkCliProgram;
 
-class ScheduleCommand extends ArkCliProgram
+abstract class ScheduleCommand extends ArkCliProgram
 {
-// 每十分钟跑一次
-    // 跑完之后发邮件
+    // 每十分钟跑一次 跑完之后发邮件
 
     public function actionDefault()
     {
@@ -47,16 +47,18 @@ class ScheduleCommand extends ArkCliProgram
     {
         $schedules = [];
 
-        $scheduleClassList = [
-            //SomeScheduleFactory::class,
-        ];
+        $scheduleFactoryList = $this->defineScheduleFactoryList();
 
-        foreach ($scheduleClassList as $scheduleClass) {
-            $class = new $scheduleClass();
-            $jobs = call_user_func_array([$class, 'generateSchedules'], []);
+        foreach ($scheduleFactoryList as $scheduleFactory) {
+            $jobs = $scheduleFactory->generateSchedules();
             $schedules = array_merge($schedules, $jobs);
         }
 
         return $schedules;
     }
+
+    /**
+     * @return BaseScheduleFactory[]
+     */
+    abstract protected function defineScheduleFactoryList();
 }

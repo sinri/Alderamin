@@ -9,6 +9,7 @@
 namespace sinri\Alderamin\core\model;
 
 
+use sinri\Alderamin\core\Alderamin;
 use sinri\ark\database\model\ArkDatabaseTableModel;
 use sinri\ark\database\pdo\ArkPDO;
 

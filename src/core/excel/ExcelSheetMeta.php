@@ -55,7 +55,7 @@ class ExcelSheetMeta
      */
     public static function getSheetMetaFromPolarisStore($code, $folder, $type = "report")
     {
-        $sqlPath = Alderamin::readConfig(['core', 'sql-store'], '/dummy');
+        $sqlPath = Alderamin::getConfig()->getSqlStore();
         $sqlPath .= DIRECTORY_SEPARATOR . $type;
         $sqlPath .= DIRECTORY_SEPARATOR . $folder;
         $sqlPath .= DIRECTORY_SEPARATOR . $code . ".json";

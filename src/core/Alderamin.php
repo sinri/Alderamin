@@ -9,18 +9,36 @@
 namespace sinri\Alderamin\core;
 
 
-use Psr\Log\LogLevel;
-use sinri\ark\core\ArkHelper;
+use sinri\Alderamin\core\configuration\AlderaminConfig;
 use sinri\ark\core\ArkLogger;
 use sinri\ark\database\mysqli\ArkMySQLi;
-use sinri\ark\database\mysqli\ArkMySQLiConfig;
 use sinri\ark\database\pdo\ArkPDO;
 use sinri\ark\database\pdo\ArkPDOConfig;
 
 class Alderamin
 {
-    const KEY_WRITE_NODE = "write_node";
-    const KEY_READ_NODE = "read_node";
+    /**
+     * @var AlderaminConfig
+     */
+    protected static $config;
+
+    /**
+     * @return AlderaminConfig
+     */
+    public static function getConfig()
+    {
+        return self::$config;
+    }
+
+    /**
+     * @param AlderaminConfig $config
+     */
+    public static function setConfig($config)
+    {
+        self::$config = $config;
+    }
+
+
     /**
      * @var ArkMySQLi[]
      */
@@ -41,36 +59,22 @@ class Alderamin
     public static function getLogger($aspect = "default")
     {
         if (!isset(self::$loggers[$aspect])) {
-            self::$loggers[$aspect] = new ArkLogger(self::readConfig(['log', 'path'], __DIR__ . '/../log'), $aspect);
+            self::$loggers[$aspect] = new ArkLogger(self::getConfig()->getLogDirPath(), $aspect);
             self::$loggers[$aspect]->setShowProcessID(true);
-            self::$loggers[$aspect]->setIgnoreLevel(self::readConfig(['log', 'level'], LogLevel::INFO));
+            self::$loggers[$aspect]->setIgnoreLevel(self::getConfig()->getLogBaseLevel());
         }
         return self::$loggers[$aspect];
     }
 
     /**
-     * @param string|array $keyChain
-     * @param null|mixed $default
-     * @return mixed|null
+     * @param string $name
+     * @return ArkMySQLi
+     * @throws \Exception
      */
-    public static function readConfig($keyChain, $default = null)
-    {
-        $config = [];
-        require __DIR__ . '/../config/config.php';
-        return ArkHelper::readTarget($config, $keyChain, $default);
-    }
-
     public static function getDatabaseNode($name)
     {
         if (!isset(self::$databaseNodes[$name])) {
-            $mysqli_config = new ArkMySQLiConfig([
-                ArkMySQLiConfig::CONFIG_HOST => self::readConfig(['nodes', $name, 'host']),
-                ArkMySQLiConfig::CONFIG_PORT => self::readConfig(['nodes', $name, 'port']),
-                ArkMySQLiConfig::CONFIG_USERNAME => self::readConfig(['nodes', $name, 'username']),
-                ArkMySQLiConfig::CONFIG_PASSWORD => self::readConfig(['nodes', $name, 'password']),
-                ArkMySQLiConfig::CONFIG_CHARSET => self::readConfig(['nodes', $name, 'charset']),
-            ]);
-            $DB = new ArkMySQLi($mysqli_config);
+            $DB = new ArkMySQLi(self::getConfig()->getMySQLiNodeConfig($name));
             $DB->connect();
 
             self::$databaseNodes[$name] = $DB;
@@ -78,6 +82,9 @@ class Alderamin
         return self::$databaseNodes[$name];
     }
 
+    /**
+     * @param string $name
+     */
     public static function revokeDatabaseNode($name)
     {
         if (isset(self::$databaseNodes[$name])) {
@@ -106,7 +113,7 @@ class Alderamin
      */
     public static function getNewCoreDatabase()
     {
-        $pdoConfig = new ArkPDOConfig(self::readConfig(['core', 'pdo']));
+        $pdoConfig = new ArkPDOConfig(self::getConfig()->getCorePdoConfig());
         $coreDatabase = new ArkPDO($pdoConfig);
         $coreDatabase->connect();
         return $coreDatabase;
@@ -125,7 +132,8 @@ class Alderamin
         if (is_array($row)) {
             array_walk(
                 $row,
-                function (&$item, $key) use ($srcCharset, $dstCharset) {
+                function (&$item, /** @noinspection PhpUnusedParameterInspection */
+                          $key) use ($srcCharset, $dstCharset) {
                     $item = mb_convert_encoding($item, $dstCharset, $srcCharset);
                 }
             );
