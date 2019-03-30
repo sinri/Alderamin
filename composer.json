@@ -26,7 +26,11 @@
   },
   "autoload": {
     "psr-4": {
-      "sinri\\Alderamin\\": "src",
+      "sinri\\Alderamin\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
       "sinri\\Alderamin\\test\\": "debug/test"
     }
   },
