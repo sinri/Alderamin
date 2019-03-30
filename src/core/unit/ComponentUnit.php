@@ -19,7 +19,7 @@ abstract class ComponentUnit extends BaseUnit
     protected $callerReportId;
 
     /**
-     * PolarisReportComponent constructor.
+     * ComponentUnit constructor.
      * @param int $callerReportId
      * @param ArkLogger $logger
      * @param array $parameters

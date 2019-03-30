@@ -10,6 +10,7 @@ namespace sinri\Alderamin\core\unit;
 
 
 use Exception;
+use sinri\Alderamin\core\Alderamin;
 use sinri\Alderamin\core\model\ReportModel;
 use sinri\ark\core\ArkLogger;
 
@@ -25,7 +26,7 @@ class ReportAgent
     protected $reportBuilder;
 
     /**
-     * PolarisReportAgent constructor.
+     * ReportAgent constructor.
      * @param ArkLogger|null $logger
      */
     public function __construct($logger = null)
@@ -59,7 +60,8 @@ class ReportAgent
             $reportCode = $reportRow['report_code'];
             //$parameters = empty($reportRow['parameters']) ? [] : json_decode($reportRow['parameters'], true);
 
-            $this->reportBuilder = self::reportBuilderFactory($reportCode, $reportId);
+            $this->reportBuilder = self::reportBuilderFactory($reportCode);
+            $this->reportBuilder->loadReportById($reportId);
 
             $dequeue = (new ReportModel())->update(
                 [
@@ -121,12 +123,11 @@ class ReportAgent
 
     /**
      * @param string $reportCode
-     * @param int $reportId
      * @return ReportUnit
      */
-    public static function reportBuilderFactory($reportCode, $reportId)
+    public static function reportBuilderFactory($reportCode)
     {
-        $reportBuilderClassName = "sinri\\polaris\\report\\builders\\{$reportCode}Builder";
-        return new $reportBuilderClassName($reportId);
+        $reportBuilderClassName = Alderamin::getConfig()->getUnitStoreNamespace() . "\\report\\{$reportCode}";
+        return new $reportBuilderClassName();
     }
 }

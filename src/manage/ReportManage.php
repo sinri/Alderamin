@@ -216,7 +216,7 @@ class ReportManage
             preg_match('/([A-Za-z0-9]+)Builder\.php$/', $item, $matches);
             $reportCode = $matches[1];
 
-            $reportBuilder = ReportAgent::reportBuilderFactory($reportCode, 0);
+            $reportBuilder = ReportAgent::reportBuilderFactory($reportCode);
 
             $hasPermission = count($reportBuilder->getReportPermissions()) === 0;
             $this->logger->info(__METHOD__ . " 是否是公开报表", ['is_public' => $hasPermission, 'reportCode' => $reportCode, 'class' => $reportBuilder->getCode(), "need" => $reportBuilder->getReportPermissions()]);

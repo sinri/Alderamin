@@ -36,7 +36,7 @@ class ExcelSheetMeta
      */
     public function __construct($reportCode, $sheetCode, $sheetCSV)
     {
-        $meta = self::getSheetMetaFromPolarisStore($sheetCode, $reportCode);
+        $meta = self::getSheetMetaFromSqlStore($sheetCode, $reportCode);
         $this->titleRow = ArkHelper::readTarget($meta, ['title_row'], null);
         if ($this->titleRow === null) {
             // 如果meta里不指定title_row的话就用sql的fields
@@ -53,7 +53,7 @@ class ExcelSheetMeta
      * @return false|array
      * @throws \Exception
      */
-    public static function getSheetMetaFromPolarisStore($code, $folder, $type = "report")
+    public static function getSheetMetaFromSqlStore($code, $folder, $type = "report")
     {
         $sqlPath = Alderamin::getConfig()->getSqlStore();
         $sqlPath .= DIRECTORY_SEPARATOR . $type;

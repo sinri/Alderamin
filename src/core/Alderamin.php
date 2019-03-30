@@ -13,7 +13,6 @@ use sinri\Alderamin\core\configuration\AlderaminConfig;
 use sinri\ark\core\ArkLogger;
 use sinri\ark\database\mysqli\ArkMySQLi;
 use sinri\ark\database\pdo\ArkPDO;
-use sinri\ark\database\pdo\ArkPDOConfig;
 
 class Alderamin
 {
@@ -113,8 +112,7 @@ class Alderamin
      */
     public static function getNewCoreDatabase()
     {
-        $pdoConfig = new ArkPDOConfig(self::getConfig()->getCorePdoConfig());
-        $coreDatabase = new ArkPDO($pdoConfig);
+        $coreDatabase = new ArkPDO(self::getConfig()->getCorePdoConfig());
         $coreDatabase->connect();
         return $coreDatabase;
     }

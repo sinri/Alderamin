@@ -15,13 +15,34 @@ class AliyunOssConfig
     protected $akSecret;
     protected $endpoint;
     protected $bucket;
+    /**
+     * @var string should have tail '/' such as  "alderamin/" or empty
+     */
+    protected $reportPathPrefix;
 
-    public function __construct($akId, $akSecret, $endpoint, $bucket)
+    /**
+     * @return string
+     */
+    public function getReportPathPrefix(): string
+    {
+        return $this->reportPathPrefix;
+    }
+
+    /**
+     * @param string $reportPathPrefix
+     */
+    public function setReportPathPrefix(string $reportPathPrefix)
+    {
+        $this->reportPathPrefix = $reportPathPrefix;
+    }
+
+    public function __construct($akId, $akSecret, $endpoint, $bucket, $reportPathPrefix)
     {
         $this->akId = $akId;
         $this->akSecret = $akSecret;
         $this->endpoint = $endpoint;
         $this->bucket = $bucket;
+        $this->reportPathPrefix = $reportPathPrefix;
     }
 
     /**

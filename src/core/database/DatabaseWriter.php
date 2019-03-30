@@ -63,8 +63,9 @@ class DatabaseWriter
      * @return mixed
      * @throws Exception
      */
-    public function insert($sql, $description, &$detail = [])
+    public function insert($sql, $description, &$detail = null)
     {
+        if ($detail === null) $detail = [];
         $done = $this->query($sql, $description, $detail);
         $detail['done'] = $done;
         if ($done === false) {
@@ -87,8 +88,9 @@ class DatabaseWriter
      * @return bool|\mysqli_result
      * @throws \Exception
      */
-    public function query($sql, $description, &$detail = [])
+    public function query($sql, $description, &$detail = null)
     {
+        if ($detail === null) $detail = [];
         $done = $this->arkMySQLi->getInstanceOfMySQLi()->query($sql);
         $detail['done'] = $done;
         if ($done) {
@@ -97,6 +99,7 @@ class DatabaseWriter
             $detail['errno'] = $this->arkMySQLi->getInstanceOfMySQLi()->errno;
             $detail['error'] = $this->arkMySQLi->getInstanceOfMySQLi()->error;
             $this->logger->error("Could not query." . $description, $detail);
+            $this->logger->logInline($sql . PHP_EOL);
             throw new Exception("Cannot run sql to query. " . $description . " Error [{$detail['errno']}] {$detail['error']}");
         }
         //$this->logger->info("Queried {$description}", $detail);
@@ -110,8 +113,9 @@ class DatabaseWriter
      * @return int
      * @throws Exception
      */
-    public function modify($sql, $description, &$detail = [])
+    public function modify($sql, $description, &$detail = null)
     {
+        if ($detail === null) $detail = [];
         $done = $this->query($sql, $description, $detail);
         $detail['done'] = $done;
         if ($done === false) {
@@ -134,8 +138,9 @@ class DatabaseWriter
      * @return bool|\mysqli_result
      * @throws Exception
      */
-    public function callProcedure($schemaName, $procedureName, $parameters, $description, &$detail = [])
+    public function callProcedure($schemaName, $procedureName, $parameters, $description, &$detail = null)
     {
+        if ($detail === null) $detail = [];
         $sql = "call {$schemaName}.{$procedureName}(";
         $x = [];
         foreach ($parameters as $parameter) {

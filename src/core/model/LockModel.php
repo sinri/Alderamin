@@ -35,7 +35,7 @@ class LockModel extends ArkDatabaseTableModel
             'lock_time' => self::now(),
         ]);
         if (empty($result)) {
-            throw new \Exception("Cannot obtain Polaris Lock for code [{$lockCode}] for #{$byReportCode} {$byReportCode}.");
+            throw new \Exception("Cannot obtain Lock for code [{$lockCode}] for #{$byReportCode} {$byReportCode}.");
         }
         return $result;
     }

@@ -139,7 +139,7 @@ class ScheduleJob extends ScheduleTime
             'parameters' => $this->parameters,
         ]);
 
-        $reportBuilder = ReportAgent::reportBuilderFactory($this->reportCode, 0);
+        $reportBuilder = ReportAgent::reportBuilderFactory($this->reportCode);
 
         $reportId = (new ReportModel())->insert(
             [

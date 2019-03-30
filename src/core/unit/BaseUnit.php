@@ -333,7 +333,7 @@ abstract class BaseUnit
             "by_report_id" => $byReportId,
             "by_runner_code" => $byReportCode,
         ]);
-        throw new \Exception("Cannot obtain Polaris Lock for code [{$lockCode}] for #{$byReportId} {$byReportCode} after tried for  {$repeatTries} times.");
+        throw new \Exception("Cannot obtain Lock for code [{$lockCode}] for #{$byReportId} {$byReportCode} after tried for  {$repeatTries} times.");
     }
 
     /**

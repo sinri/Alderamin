@@ -28,13 +28,55 @@ class AlderaminConfig
      */
     protected $sqlStore;
     /**
-     * @var string
+     * @var string path to store XLSX
      */
     protected $reportStore;
+    /**
+     * @var string path to store CSV
+     */
+    protected $craftStore;
+
+    /**
+     * @return string
+     */
+    public function getCraftStore(): string
+    {
+        return $this->craftStore;
+    }
+
+    /**
+     * @param string $craftStore
+     */
+    public function setCraftStore(string $craftStore)
+    {
+        $this->craftStore = $craftStore;
+    }
+
     /**
      * @var int
      */
     protected $cronMax;
+    /**
+     * @var string must not contains tail '\', e.g.  "XXX\\YYY"
+     */
+    protected $unitStoreNamespace;
+
+    /**
+     * @return string
+     */
+    public function getUnitStoreNamespace(): string
+    {
+        return $this->unitStoreNamespace;
+    }
+
+    /**
+     * @param string $unitStoreNamespace
+     */
+    public function setUnitStoreNamespace(string $unitStoreNamespace)
+    {
+        $this->unitStoreNamespace = $unitStoreNamespace;
+    }
+
     /**
      * @var string
      */

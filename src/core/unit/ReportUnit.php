@@ -54,27 +54,20 @@ abstract class ReportUnit extends BaseUnit
     protected $feedback;
 
     /**
-     * PolarisReportBuilder constructor.
-     * @param int $reportId
+     * ReportUnit constructor.
      * @throws Exception
      */
-    public function __construct($reportId)
+    public function __construct()
     {
         $this->logger = ArkLogger::makeSilentLogger();
-
-        $this->excelMeta = new ExcelMeta();
-
-        if ($reportId) {
-            $this->loadReportById($reportId);
-            $this->prepareStorage();
-        }
     }
 
     /**
      * @param $reportId
+     * @return $this
      * @throws Exception
      */
-    protected function loadReportById($reportId)
+    public function loadReportById($reportId)
     {
         $reportRow = (new ReportModel())->selectRow(['report_id' => $reportId]);
         if (empty($reportRow)) {
@@ -84,6 +77,8 @@ abstract class ReportUnit extends BaseUnit
         if ($reportRow['status'] !== ReportModel::STATUS_ENQUEUED) {
             throw new Exception("Report is not enqueued now, id " . json_encode($reportId));
         }
+
+        $this->excelMeta = new ExcelMeta();
 
         $this->reportId = $reportId;
         $this->reportTitle = $reportRow['report_title'];
@@ -108,16 +103,20 @@ abstract class ReportUnit extends BaseUnit
                 $this->attributes[$attributeRow['key']][] = $attributeRow['value'];
             }
         }
+
+        $this->prepareCraftStorage();
+
+        return $this;
     }
 
     /**
      * Set up the storage directory of generated CSV files
-     * It relies on the polaris config
+     * It relies on the config
      * @throws Exception
      */
-    protected function prepareStorage()
+    protected function prepareCraftStorage()
     {
-        $store = Alderamin::getConfig()->getReportStore();
+        $store = Alderamin::getConfig()->getCraftStore();
         if (empty($store)) {
             $this->logger->error("REPORT STORE EMPTY");
             throw new Exception("CSV Store Not Configured");
@@ -129,7 +128,7 @@ abstract class ReportUnit extends BaseUnit
         mkdir($dir, 0777, true);
 
         if (!file_exists($dir)) {
-            $this->logger->error("Cannot ensure report store: " . $dir);
+            $this->logger->error("Cannot ensure craft store: " . $dir);
         }
 
         $this->logger->notice(__FUNCTION__ . '@' . __LINE__ . " Ready, report key is " . $taskKey);
@@ -160,7 +159,7 @@ abstract class ReportUnit extends BaseUnit
      * @return false|array
      * @throws Exception
      */
-    public function getSheetMetaFromPolarisStore($name, $folder = null, $type = "report")
+    public function getSheetMetaFromSqlStore($name, $folder = null, $type = "report")
     {
         if ($folder === null) {
             $folder = $this->getCode();
@@ -199,6 +198,10 @@ abstract class ReportUnit extends BaseUnit
     public final function run(): bool
     {
         try {
+            if (empty($this->reportId)) {
+                throw new Exception("Report ID did not loaded");
+            }
+
             $this->logger->notice("Register Shutdown Handler...");
             $logger = $this->logger;
             register_shutdown_function(function () use ($logger) {
@@ -276,12 +279,13 @@ abstract class ReportUnit extends BaseUnit
      */
     public static function getExcelStorage()
     {
-        $store = Alderamin::getConfig()->getReportStore();
-        if (empty($store)) {
+        $dir = Alderamin::getConfig()->getReportStore();
+        if (empty($dir)) {
             throw new Exception("Excel Store Not Configured");
         }
-        $taskKey = "excel";
-        $dir = $store . DIRECTORY_SEPARATOR . $taskKey;
+//        $taskKey = "excel";
+//        $dir = $dir . DIRECTORY_SEPARATOR . $taskKey;
+
         if (!file_exists($dir)) {
             mkdir($dir, 0777, true);
         }
@@ -396,7 +400,7 @@ abstract class ReportUnit extends BaseUnit
                 $mailer->addReceiver($email);
             }
 
-            $html = "<h1>Polaris Regular Report Delivery Service</h1>" .
+            $html = "<h1>Alderamin Regular Report Delivery Service</h1>" .
                 "<h2>" . $this->reportId . '-' . $this->reportTitle . "</h2>" .
                 "<p>Completed on " . date('Y-m-d H:i:s') . "</p>";
             $html .= '<h3>Parameters</h3>';
@@ -418,7 +422,7 @@ abstract class ReportUnit extends BaseUnit
                 }
             }
 
-            $sent = $mailer->setSubject($this->reportId . '-' . $this->reportTitle . " - Polaris")
+            $sent = $mailer->setSubject($this->reportId . '-' . $this->reportTitle . " - Alderamin")
                 ->setHTMLBody($html)
                 ->addCCAddress("ljni@leqee.com", "SingleDog")
                 ->finallySend($sendingError);

@@ -16,6 +16,7 @@ CREATE TABLE `report`
   `feedback`       mediumtext,
   `pid`            int(11)               DEFAULT NULL,
   `archive_status` varchar(16)  NOT NULL DEFAULT 'PENDING' COMMENT 'PENDING SENDING DONE ERROR',
+  `exclusive_hash` varchar(200)          DEFAULT NULL,
   PRIMARY KEY (`report_id`),
   KEY `IND_FETCH_NEW` (`status`, `priority`, `apply_time`),
   KEY `report_code` (`report_code`),

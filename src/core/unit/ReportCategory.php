@@ -14,7 +14,7 @@ class ReportCategory
     protected $categoryCode;
     protected $categoryName;
 
-    protected function __construct($categoryCode, $categoryName)
+    public function __construct($categoryCode, $categoryName)
     {
         $this->categoryCode = $categoryCode;
         $this->categoryName = $categoryName;

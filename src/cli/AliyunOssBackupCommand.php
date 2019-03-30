@@ -17,7 +17,7 @@ use sinri\Alderamin\core\model\ReportModel;
 use sinri\Alderamin\core\unit\ReportUnit;
 use sinri\ark\cli\ArkCliProgram;
 
-abstract class AliyunOssBackupCommand extends ArkCliProgram
+abstract class ComponentUnit extends ArkCliProgram
 {
     /**
      * @var AliyunOssConfig
@@ -29,14 +29,14 @@ abstract class AliyunOssBackupCommand extends ArkCliProgram
     private $ossClient;
 
     /**
-     * PolarisToOssCommand constructor.
+     * ComponentUnit constructor.
      * @throws OssException
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->logger = Alderamin::getLogger("PolarisToOss");
+        $this->logger = Alderamin::getLogger("BackupToOSS");
         $this->ossConfig = $this->defineAliyunOssConfig();
         $this->ossClient = $this->getOssClient();
         $this->logger->info(__CLASS__ . " Initialized");
@@ -102,7 +102,7 @@ abstract class AliyunOssBackupCommand extends ArkCliProgram
         try {
             $excelFile = ReportUnit::getExcelStorage() . DIRECTORY_SEPARATOR . $report_id . ".xlsx";
             $this->logger->info("Ready to upload", ['report_id' => $report_id, 'file' => $excelFile]);
-            $uploaded = $this->uploadFileToOss($excelFile, "polaris_report/" . $report_id . ".xlsx");
+            $uploaded = $this->uploadFileToOss($excelFile, $this->ossConfig->getReportPathPrefix() . $report_id . ".xlsx");
             if (!$uploaded) throw new \Exception("Upload Error for Report " . $report_id);
 
             $this->logger->notice("Report Excel Result Upload Over", ['report_id' => $report_id, 'file' => $excelFile]);
