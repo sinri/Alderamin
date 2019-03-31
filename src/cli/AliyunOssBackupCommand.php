@@ -17,7 +17,7 @@ use sinri\Alderamin\core\model\ReportModel;
 use sinri\Alderamin\core\unit\ReportUnit;
 use sinri\ark\cli\ArkCliProgram;
 
-abstract class ComponentUnit extends ArkCliProgram
+abstract class AliyunOssBackupCommand extends ArkCliProgram
 {
     /**
      * @var AliyunOssConfig

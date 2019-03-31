@@ -52,4 +52,19 @@ abstract class ComponentUnit extends BaseUnit
         }
         return $this->fetchQueryTemplateFromSqlStore($name, $folder, "component", $runCommonReplace);
     }
+
+    /**
+     * @param string $componentClass AnyComponentUnit::class
+     * @param array $parameters
+     * @return boolean
+     * @throws \Exception
+     */
+    protected function callComponent($componentClass, $parameters = [])
+    {
+        $component = (new $componentClass($this->callerReportId, $this->logger, $parameters));
+        if (is_subclass_of($component, self::class))
+            return call_user_func_array([$component, 'run'], []);
+        else
+            throw new \Exception("Component Illegal");
+    }
 }

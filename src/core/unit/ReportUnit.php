@@ -519,4 +519,19 @@ abstract class ReportUnit extends BaseUnit
             }
         }
     }
+
+    /**
+     * @param string $componentClass AnyComponentUnit::class
+     * @param array $parameters
+     * @return boolean
+     * @throws Exception
+     */
+    protected function callComponent($componentClass, $parameters = [])
+    {
+        $component = (new $componentClass($this->reportId, $this->logger, $parameters));
+        if (is_subclass_of($component, ComponentUnit::class))
+            return call_user_func_array([$component, 'run'], []);
+        else
+            throw new \Exception("Component Illegal");
+    }
 }
