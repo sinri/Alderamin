@@ -12,6 +12,22 @@ namespace sinri\Alderamin\core\unit;
 class ReportPermission
 {
     private static $permissionDefinitions = null;
+
+    /**
+     * @return null
+     */
+    public static function getPermissionDefinitions()
+    {
+        return self::$permissionDefinitions;
+    }
+
+    /**
+     * @param ReportPermission[] $permissionDefinitions
+     */
+    public static function setPermissionDefinitions($permissionDefinitions)
+    {
+        self::$permissionDefinitions = $permissionDefinitions;
+    }
     public $permissionCode;
     public $permissionTitle;
     public $permissionMemo;
@@ -27,20 +43,6 @@ class ReportPermission
         $this->permissionCode = $code;
         $this->permissionTitle = $title;
         $this->permissionMemo = $memo;
-    }
-
-    /**
-     * @return ReportPermission[]
-     */
-    public static function getPermissionList()
-    {
-        if (self::$permissionDefinitions === null) {
-            self::$permissionDefinitions = [
-                new ReportPermission("report_permission_demo", "一个测试用的示例", "就是个示例"),
-                new ReportPermission("report_permission_dev", "报表调试权限", "开发人员为所欲为用"),
-            ];
-        }
-        return self::$permissionDefinitions;
     }
 
     /**

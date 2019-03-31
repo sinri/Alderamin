@@ -244,7 +244,7 @@ class ReportManage
      */
     public function availableReportPermissions()
     {
-        return ReportPermission::getPermissionList();
+        return ReportPermission::getPermissionDefinitions();
     }
 
     /**
