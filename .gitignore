@@ -8,3 +8,9 @@ composer.phar
 /debug/
 /config/config.php
 /.idea/
+
+/demo/test/config/
+
+/demo/log/log-*.log
+/demo/store/craft-store/*/*.csv
+/demo/store/report-store/*.xlsx
