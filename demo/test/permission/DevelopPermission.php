@@ -13,8 +13,11 @@ use sinri\Alderamin\core\unit\ReportPermission;
 
 class DevelopPermission extends ReportPermission
 {
+    const CODE = "DevelopPermission";
+    const TITLE = "Develop Permission";
+
     public static function getInstance()
     {
-        return new self("DevelopPermission", "Develop Permission", "For Developers");
+        return new self(self::CODE, self::TITLE, "For Developers");
     }
 }

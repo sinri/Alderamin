@@ -12,6 +12,7 @@ namespace sinri\Alderamin\test\units\report;
 use sinri\Alderamin\core\unit\ReportCategory;
 use sinri\Alderamin\core\unit\ReportUnit;
 use sinri\Alderamin\test\category\UnknownCategory;
+use sinri\Alderamin\test\permission\DevelopPermission;
 use sinri\Alderamin\test\units\component\SampleComponent;
 
 class SampleReport extends ReportUnit
@@ -57,7 +58,7 @@ class SampleReport extends ReportUnit
      */
     public function getReportPermissions(): array
     {
-        return [];
+        return [DevelopPermission::CODE];
     }
 
     protected function runFetchMeta()
