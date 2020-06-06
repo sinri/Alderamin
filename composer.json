@@ -33,5 +33,11 @@
     "psr-4": {
       "sinri\\Alderamin\\test\\": "debug/test"
     }
+  },
+  "repositories": {
+    "packagist": {
+      "type": "composer",
+      "url": "https://mirrors.aliyun.com/composer/"
+    }
   }
 }
